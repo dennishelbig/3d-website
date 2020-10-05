@@ -1,0 +1,483 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+
+// #viewPortSize{
+// 	display: table!important;
+// }
+
+
+@mixin name( $name ){
+  color: white;
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  &:before{
+
+    content: $name;
+    position: absolute;
+    z-index: 100;
+    left: 10px;
+    top: 10px;
+    opacity: 0.5;
+    
+  }
+}
+
+
+
+
+
+::selection {
+    background: black; /* WebKit/Blink Browsers */
+    color: white;
+}
+::-moz-selection {
+    background: black; /* Gecko Browsers */
+    color: white;
+}
+
+html, body{
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background: lightblue;
+	height: 100vh;
+	width: 100vw;
+  overflow: hidden;
+  
+  transition: background-color 0.2s ease-out 0.15s;
+
+  &.background-black{
+    background-color: black;  
+    transition: background-color 0.2s ease-out 0s;
+  }
+}
+
+#cross-hair{
+	content: '';
+	position: fixed;
+	z-index: 1000;
+	left: 50%;
+	top: 50%;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	transform: translate(-50%,-50%);
+	background: red;
+  
+  &.over{
+	  background: pink;
+  }
+}
+
+body.cross-haired{
+	#cross-hair{
+		display: block;
+	}
+}
+
+
+
+
+#info-box{
+	padding: 10px;
+	font-family: arial;
+	z-index: 100;
+	position: fixed;
+	background: red;
+	top: 0;
+	left: 0;
+	width: 150px;
+	min-height: 15px;
+	background: black;
+	color: white;
+	opacity: 0.5;
+
+
+	span{
+		display: inline-table;
+		min-width: 50px;
+		padding-left: 10px;
+	}
+}
+
+
+$perspective: 40vw;
+$perspectiveMinus: -1 * $perspective;
+$size: $perspective * 2;
+
+#canvas{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
+	top: 0;
+	left: 0;
+	perspective: $perspective * 1.5;
+}
+
+
+#square{
+	width: $size;
+	height: $size;
+	position: absolute;
+	transform: translate3d(0px, 0px, $perspective ) rotateX(-90deg);
+	transform-style: preserve-3d;
+
+	#x-axis,
+	#z-axis{
+		transform-style: preserve-3d;
+		position: absolute;
+		width: $size;
+		height: $size;
+	}
+}
+
+
+$offset-top: $size / 2 * 0.35;
+$wall-height: $size * 0.35;
+$offset-bottom: $wall-height * -1;
+
+
+#ceiling,
+#floor,
+.level{
+  transform-style: preserve-3d;
+  transition: 1s ease-in-out; // don't touch
+}
+
+
+#ceiling,
+#floor{
+  top: 0;
+  left: 0;
+  position: absolute;
+
+  .inner{
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+} 
+
+#ceiling{
+  transform: translateZ( $perspectiveMinus * 0.85 );
+}
+
+#floor{
+  transform: translateZ( $perspective * 0.15 );
+}
+
+
+
+
+.ceiling,
+.floor{
+  transition: 0.3s;
+  overflow: hidden;
+
+  .panel{
+    position: absolute;
+    width: $size / 2;
+    height: $size / 2;
+
+    left: 50%;
+    bottom: 0;
+    transform-origin: 0.20% 100%;
+    transform: rotate(-30deg);
+    overflow: hidden;
+    opacity: 0.9;
+
+    &:after{
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba( white, 1 );
+      transform: rotate(-30deg);
+      transform-origin: 0% 100%;
+      transition: 0.3s;
+    }
+  }
+}
+
+
+body.background-black{
+  .ceiling,
+  .floor{
+    .panel{
+      opacity: 0.8;
+      
+      &:after{
+        background: rgba( black, 1 );
+      }
+    }
+  } 
+}
+
+
+#canvas.first{
+  .level-1{
+    transform: translateZ( 0 );
+  }
+  .level-2{
+    transform: translateZ( $perspective );
+  }
+  .level-3{
+    transform: translateZ( $perspective * 2 );
+  }
+}
+
+
+#canvas.second{
+  .level-1{
+    transform: translateZ( $perspectiveMinus );
+  }
+  .level-2{
+    transform: translateZ( 0 );
+  }
+  .level-3{
+    transform: translateZ( $perspective );
+  }
+}
+
+
+#canvas.third{
+  .level-1{
+    transform: translateZ( $perspectiveMinus * 2 );
+  }
+  .level-2{
+    transform: translateZ( $perspectiveMinus );
+  }
+  .level-3{
+    transform: translateZ( 0 );
+  }
+}
+
+
+
+
+.level-part,
+.ceiling,
+.floor{
+	width: $size / 2;
+	height: $size / 2.3;
+	margin-left: $size / 4;
+
+	position: absolute;
+	top: 6.5%; 
+	top: $size / 15; 
+
+	transform-origin: center bottom;
+	transform-style: preserve-3d;
+
+	&:nth-child(1){
+    transform: translate3d(0, 0, $offset-top) rotate(-60deg);
+    .wall{ @include name('0'); }
+	}
+
+	&:nth-child(2){
+		transform: translate3d(0, 0, $offset-top) rotate(-120deg);
+    .wall{ @include name('1'); }
+	}
+
+	&:nth-child(3){
+		transform: translate3d(0, 0, $offset-top) rotate(-180deg);
+    .wall{ @include name('2'); }
+	}
+
+	&:nth-child(4){
+		transform: translate3d(0, 0, $offset-top) rotate(-240deg);
+    .wall{ @include name('3'); }
+	}
+
+	&:nth-child(5){
+		transform: translate3d(0, 0, $offset-top) rotate(-300deg);
+    .wall{ @include name('4'); }
+	}
+
+	&:nth-child(6){
+		transform: translate3d(0, 0, $offset-top) rotate(0deg);
+    .wall{ @include name('5'); }
+	}
+
+	// &:nth-child(1),
+	// &:nth-child(2),
+  // &:nth-child(3),
+	// &:nth-child(4),
+	// &:nth-child(5),
+  // &:nth-child(6)
+  // {
+  //   .wall{
+  //   // display: none;
+  //   }
+	// }
+
+	.wall{
+		position: absolute;
+		height: $wall-height;
+		width: 100%;
+		top: 0;
+		left: 0;
+		// background-color: rgba(greenyellow, 0.5);
+		// background-color: rgba(white, 0.5);
+		transform: translate3d(0%, 0% ,$offset-bottom) rotateX(90deg) rotateY(180deg);
+    transform-origin: center top;
+    transform-style: preserve-3d;
+
+    // &.focus{
+      // opacity: 1;
+    // }
+	}
+}
+
+
+.hidden .target{
+  display: none;
+}
+
+
+.static-img,
+.target{
+  transform-style: preserve-3d;
+  position: absolute;
+  
+  width: 90%;
+  height: 90%;
+
+  top: 5%;
+  left: 5%;
+
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  transition: 0.5s ease-out;
+
+  transform: translateZ(-3em);
+
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.fullscreen,
+.rect{
+  position: absolute;
+
+  background-color: white;
+  outline-offset: -1px;
+  opacity: 0;
+  transition: 0.3s ease-out 0.0s;
+  transform: translateZ( 2em );
+  z-index: 1;
+
+  &.is-active{
+    background: red;
+    outline: 1px solid white;
+  }
+}
+
+
+.rect{
+  width: 70%;
+  height: 10%;
+  bottom: 5%;
+  left: 15%;
+}
+
+
+.fullscreen{
+  width: 20%;
+  height: 30%;
+  top: 5%;
+  right: 5%;
+}
+
+
+
+
+.current-level .level-part.enable-focus.focus{
+
+  .static-img,
+  .target{
+    transform: translateZ(2em);
+    transition: 0.35s ease-out 0s;
+  }
+
+  .rect,
+  .fullscreen{
+    opacity: 0.8;
+    transform: translateZ(4em);
+    transition: 0.25s ease-out 0.5s;
+  }
+}
+
+.level{
+  pointer-events: none;
+
+  &.current-level{
+    pointer-events: auto;
+  }
+}
+
+
+@mixin createWallpapers( $suffix ){
+  @for $i from 1 to 7 {
+    .level-part:nth-child( #{$i} ){ 
+      .target, 
+      .static-img{
+        background-image: url('../img/#{$suffix}/#{$i}.#{$suffix}');
+      }
+    }
+  }
+}
+
+
+video{
+  width: 100%;
+  height: 100%;
+
+  source{
+    height: 100%;
+  }
+}
+
+.level-1{
+  // @include createWallpapers( 'gif' );
+}
+
+.level-2{  
+  @include createWallpapers( 'jpg' );
+}
+
+.level-3{
+  @include createWallpapers( 'png' );
+}
+
+img,
+.jsgif,
+canvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+// show blank
+#square,
+#x-axis,
+#y-axis,
+#z-axis,
+.level,
+.level-part,
+.wall,
+.target{
+  // width: auto;
+  // transform: none!important;
+  // position: relative!important;
+}
