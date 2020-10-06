@@ -1492,36 +1492,6 @@
 		"oAP": "/js/gsap.min.js.map",
 		"oF": 0
 		},
-	"/js/hexa-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/hexa-min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/hexa-min.js.map": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/js/hexa-min.js.map",
-		"oF": 0
-		},
-	"/js/hexa.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/hexa-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"/js/keypress-2.1.5.min.js": {
 		"bF": 0,
 		"ft": 64,
@@ -1617,56 +1587,34 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/js/platform-min.js": {
+	"/js/script-min.js": {
 		"bF": 0,
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/js/platform-min-min.js",
+		"oAP": "/js/script-min-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
-	"/js/platform-min.js.map": {
+	"/js/script-min.js.map": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/js/platform-min.js.map",
+		"oAP": "/js/script-min.js.map",
 		"oF": 0
 		},
-	"/js/platform.js": {
+	"/js/script.js": {
 		"bF": 0,
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/js/platform-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/room-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/room-min-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"/js/room.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/js/room-min.js",
-		"oF": 0,
-		"sC": 3,
+		"oAP": "/js/script-min.js",
+		"oF": 1,
+		"sC": 1,
 		"tS": 0
 		},
 	"/README.md": {
@@ -1688,6 +1636,19 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"/scss/compass.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"ec": 1,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "/scss/compass.css",
+		"oF": 0,
+		"oS": 0,
+		"sct": 0
+		},
 	"/scss/hexa.scss": {
 		"aP": 0,
 		"bl": 0,
@@ -1696,8 +1657,8 @@
 		"ft": 4,
 		"ma": 0,
 		"oA": 0,
-		"oAP": "/scss/hexa.css",
-		"oF": 0,
+		"oAP": "/css/hexa.css",
+		"oF": 2,
 		"oS": 0,
 		"sct": 0
 		},
@@ -1713,6 +1674,16 @@
 		"oF": 0,
 		"oS": 0,
 		"sct": 0
+		},
+	"/scss/styles.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "/scss/styles-min.css",
+		"oF": 0,
+		"oS": 3
 		},
 	"/scss/styles.scss": {
 		"aP": 0,

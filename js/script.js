@@ -92,7 +92,7 @@ $images.forEach(function($image, i){
   if (/.*\.gif/.test($image.src)) {
     var rub = new SuperGif({ gif: $image } );
     rub.load(function(){
-      console.log('oh hey, now the gif is loaded');
+      // console.log('oh hey, now the gif is loaded');
     });
     // use rubs later on play / pause
     $rubs.push(rub);
@@ -188,12 +188,19 @@ function updateAxis( x, y ){
 }
 
 
-function updateInfo(x, y){
-  x = Math.floor(x);
-  y = Math.floor(y);
-  
-  $coord_x.innerHTML = x;
-  $coord_y.innerHTML = y;
+var roundedCoords= {
+
+};
+
+function roundCoords(){
+  roundedCoords.x = Math.floor(currentViewCoords.x);
+  roundedCoords.y = Math.floor(currentViewCoords.y);
+}
+
+
+function updateInfo(){
+  $coord_x.innerHTML = roundedCoords.x;
+  $coord_y.innerHTML = roundedCoords.y;
 }
 
 
@@ -415,6 +422,52 @@ function isOverlapping(){
 
 
 
+
+//************************************************** */
+//**************       COMPASS       *************** */
+//************************************************** */
+
+var positivX;
+var cuttedX;
+
+function cutXto10(){
+  if(positivX === roundedCoords.x ){
+    return;
+  }else if(roundedCoords.x < 0 ){
+    positivX = roundedCoords.x * -1;
+  }else{
+    positivX = roundedCoords.x;
+  }
+  cuttedX = +positivX.toString().split('').pop();
+}
+
+var $compassX = document.querySelector('#compass-x');
+var $compassViewportX = $compassX.querySelector('.viewport');
+var $meterX = $compassViewportX.querySelector('.meter');
+
+$compassViewportX.append( $meterX.cloneNode(true) );
+$compassViewportX.append( $meterX.cloneNode(true) );
+$compassViewportX.append( $meterX.cloneNode(true) );
+$compassViewportX.append( $meterX.cloneNode(true) );
+$compassViewportX.append( $meterX.cloneNode(true) );
+
+function updateCompass(){
+  cutXto10();
+  $compassViewportX.style.transform = 'translateX('+( ( cuttedX ) * -2 )+'%)';
+}
+
+
+
+
+
+
+//************************************************** */
+//**************     UPDATE VIEW     *************** */
+//************************************************** */
+
+
+
+
 function updateView( movementX, movementY, invert ){
   if( invert === true ){
     currentViewCoords.x = currentViewCoords.x + movementX / 10 * -1;
@@ -429,7 +482,9 @@ function updateView( movementX, movementY, invert ){
 
   focusImage( currentViewCoords.x, currentViewCoords.y );
 	updateAxis( currentViewCoords.x, currentViewCoords.y );
-  updateInfo( currentViewCoords.x, currentViewCoords.y);
+  roundCoords();
+  updateInfo();
+  updateCompass();
 }
 
 
@@ -567,6 +622,7 @@ function crosshairUnlocked(){
 
 
 
+
 // pointer Lock
 var havePointerLock = 'pointerLockElement' in document ||
   'mozPointerLockElement' in document ||
@@ -631,8 +687,5 @@ document.addEventListener('touchend', getTouchInput);
 // on scroll
 $canvas.addEventListener("wheel", getSrollInput, false);
 $canvas.addEventListener("wheel", targetingThrottled, false);
-
-
-
 
 

@@ -1,0 +1,61 @@
+.compass{
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  overflow: hidden;
+  background: gold;
+
+  .viewport{
+    position: absolute;
+    height: 100%;
+    width: 120%;
+    background-color: gold;
+    display: flex;
+    left: 0;
+    
+    .meter{
+      position: relative;
+      width: calc( 100% / 6 );
+      height: 100%;
+    }
+  }
+}
+
+#compass-x{
+  &:after{
+    content: '';
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    background: rgba(red, 0.6);
+    left: calc( 50% - 0px );
+  }
+  top: 1em;
+  left: 50%;
+  width: calc(20px * 20);
+  height: 1em;
+  transform: translateX(calc(-50% - 1px));
+
+  .meter{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .meter-line{
+    width: 2px;
+    height: 50%;
+    background-color: black;
+    
+    &.mlx-0{
+      height: 100%;
+    }
+
+    &.mlx-5{
+      height: 75%;
+    }
+
+    &.mlx-9{
+      margin-right: 8px;
+    }
+  }
+}
