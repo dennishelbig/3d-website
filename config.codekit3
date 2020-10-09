@@ -1213,13 +1213,13 @@
 		"oA": 0,
 		"oAP": "/img/gif/1.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/gif/2.gif": {
 		"ft": 4194304,
 		"iS": 148395,
 		"oA": 0,
-		"oAP": "/img/gif/2.gif",
+		"oAP": "/img/gif/waiting.gif",
 		"oF": 0,
 		"opt": 0
 		},
@@ -1229,11 +1229,11 @@
 		"oA": 0,
 		"oAP": "/img/gif/3.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/gif/4.gif": {
 		"ft": 4194304,
-		"iS": 69630,
+		"iS": 625865,
 		"oA": 0,
 		"oAP": "/img/gif/4.gif",
 		"oF": 0,
@@ -1241,7 +1241,7 @@
 		},
 	"/img/gif/5.gif": {
 		"ft": 4194304,
-		"iS": 66350,
+		"iS": 3338069,
 		"oA": 0,
 		"oAP": "/img/gif/5.gif",
 		"oF": 0,
@@ -1249,7 +1249,7 @@
 		},
 	"/img/gif/6.gif": {
 		"ft": 4194304,
-		"iS": 83454,
+		"iS": 1052096,
 		"oA": 0,
 		"oAP": "/img/gif/6.gif",
 		"oF": 0,
@@ -1261,7 +1261,7 @@
 		"oA": 0,
 		"oAP": "/img/gif_prev/1.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/gif_prev/2.gif": {
 		"ft": 4194304,
@@ -1269,7 +1269,7 @@
 		"oA": 0,
 		"oAP": "/img/gif_prev/2.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/gif_prev/3.gif": {
 		"ft": 4194304,
@@ -1277,7 +1277,7 @@
 		"oA": 0,
 		"oAP": "/img/gif_prev/3.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/gif_prev/4.gif": {
 		"ft": 4194304,
@@ -1285,7 +1285,7 @@
 		"oA": 0,
 		"oAP": "/img/gif_prev/4.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/gif_prev/5.gif": {
 		"ft": 4194304,
@@ -1293,7 +1293,7 @@
 		"oA": 0,
 		"oAP": "/img/gif_prev/5.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/gif_prev/6.gif": {
 		"ft": 4194304,
@@ -1301,7 +1301,7 @@
 		"oA": 0,
 		"oAP": "/img/gif_prev/6.gif",
 		"oF": 0,
-		"opt": 0
+		"opt": 1
 		},
 	"/img/jpg/1.jpg": {
 		"ft": 16384,
@@ -1706,7 +1706,7 @@
 "projectAttributes": {
 	"creationDate": 623603338.21050298,
 	"displayValue": "3d-website",
-	"displayValueWasSetByUser": 0,
+	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets-silver",
 	"iconImageWasSetByUser": 0
 	},

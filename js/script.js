@@ -55,6 +55,7 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
 
   if( i < 6){
     $imgTag.setAttribute('src', 'img/gif_prev/'+(i+1)+'.gif');
+    $imgTag.setAttribute('src', 'img/gif/'+(i+1)+'.gif');
     $imgTag.setAttribute('rel:animated_src', 'img/gif/'+(i+1)+'.gif');
     $imgTag.setAttribute('rel:auto_play', '0');
     $imgTag.setAttribute('rel:rubbable', '0');
@@ -66,6 +67,7 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
   $element.append($fullscreen);
 
   $staticImg.append($imgTag);
+  
 
   
   $target.addEventListener('click', function(){
@@ -88,15 +90,17 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
 var $images = document.querySelectorAll('img');
 var $rubs = [];
 $images.forEach(function($image, i){
+    if (/.*\.gif/.test($image.src)) {
+      var rub = new SuperGif({ gif: $image } );
+      rub.load(function(){
+        console.log('oh hey, now the gif is loaded');
+      });
+      $rubs.push(rub);
+      setTimeout(function(){
+      },0 * i );
+      // use rubs later on play / pause
+    }
 
-  if (/.*\.gif/.test($image.src)) {
-    var rub = new SuperGif({ gif: $image } );
-    rub.load(function(){
-      // console.log('oh hey, now the gif is loaded');
-    });
-    // use rubs later on play / pause
-    $rubs.push(rub);
-  }
 });
 
 
