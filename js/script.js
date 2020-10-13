@@ -1,6 +1,6 @@
 /* jshint devel: true */
 /* jshint undef: true, unused: false */
-/*globals TimelineMax, gsap, _, Linear, Sine, SuperGif */
+/*globals TimelineMax, gsap, _, Linear, Sine, SuperGif, Freezeframe */
 /* "-W100": true */
 /* :write ++enc=utf-8 */
 
@@ -54,7 +54,8 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
   
 
   if( i < 6){
-    $imgTag.setAttribute('src', 'img/gif_prev/'+(i+1)+'.gif');
+    $imgTag.setAttribute('class', 'freezeframe');
+    // $imgTag.setAttribute('src', 'img/gif_prev/'+(i+1)+'.gif');
     $imgTag.setAttribute('src', 'img/gif/'+(i+1)+'.gif');
     $imgTag.setAttribute('rel:animated_src', 'img/gif/'+(i+1)+'.gif');
     $imgTag.setAttribute('rel:auto_play', '0');
@@ -88,18 +89,37 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
 /************************************************ */
 
 var $images = document.querySelectorAll('img');
-var $rubs = [];
+var $gifs = [];
 $images.forEach(function($image, i){
     if (/.*\.gif/.test($image.src)) {
-      var rub = new SuperGif({ gif: $image } );
-      rub.load(function(){
-        console.log('oh hey, now the gif is loaded');
+      //   var rub = new SuperGif({ gif: $image } );
+      //   rub.load(function(){
+      //     console.log('oh hey, now the gif is loaded');
+      //   });
+      //   $rubs.push(rub);
+      //   setTimeout(function(){
+      //   },0 * i );
+      //   // use rubs later on play / pause
+    
+      var $gif = new Freezeframe($image, {
+        trigger: false
       });
-      $rubs.push(rub);
-      setTimeout(function(){
-      },0 * i );
-      // use rubs later on play / pause
+      $gif.stop();
+       
+      $gif.on('toggle', function(items, isPlaying) {
+        if (isPlaying) {
+          // console.log($items.$image);
+        // items.$image.classList.add('is-playing');
+          // do something on start
+        } else {
+        // items.$image.classList.remove('is-playing');
+          // do something on stop
+        }
+      });
+
+      $gifs.push($gif);
     }
+
 
 });
 
@@ -370,6 +390,30 @@ function adjustY( nulledX ){
 
 
 
+function playPauseGifs(){
+  console.log('playpausegif');
+
+  $gifs.forEach(function($gif, ribIndex){
+    // console.log($gif.items[0].$image.classList);
+    if(xIndex === ribIndex && focusBool === true){
+      // if( !$gif.items[0].$image.classList.contains('is-playing') ){
+        $gif.items[0].$image.classList.add('is-playing');
+        $gif.start();
+        console.log('start');
+      // }
+    }else{
+      $gif.items[0].$image.classList.remove('is-playing');
+      $gif.stop();
+      console.log('stop');
+    }
+    
+  });
+}
+
+
+
+var waiting = false;     
+
 function focusImage( x, y ){
   var nulledX = nullX( x );
   var yAdjustment = adjustY(nulledX);  
@@ -390,13 +434,24 @@ function focusImage( x, y ){
   }
 
 
-  $rubs.forEach(function(rub, ribIndex){
-    if(xIndex === ribIndex && focusBool === true ){
-      rub.play();
-    }else{
-      rub.pause();
-    }
-  });
+
+  if (!waiting) {                       // If we're not waiting
+  playPauseGifs()                 ;  // Execute users function
+  waiting = true;                   // Prevent future invocations
+  setTimeout(function () {          // After a period of time
+      waiting = false;              // And allow future invocations
+  }, 1000);
+}
+
+
+  // $rubs.forEach(function(rub, ribIndex){
+  //   if(xIndex === ribIndex && focusBool === true ){
+  //     rub.play();
+  //   }else{
+  //     rub.pause();
+  //   }
+  // });
+  // playPauseGifs();
 }
 
 

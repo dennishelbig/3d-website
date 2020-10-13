@@ -526,6 +526,16 @@ canvas {
   object-fit: cover;
 }
 
+canvas {
+  display: none;
+}
+
+.ff-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+}
+
 .compass {
   position: fixed;
   z-index: 100;

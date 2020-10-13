@@ -1,0 +1,23 @@
+export const classes = {
+  SELECTOR: '.freezeframe',
+  CONTAINER: 'ff-container',
+  LOADING_ICON: 'ff-loading-icon',
+  IMAGE: 'ff-image',
+  CANVAS: 'ff-canvas',
+  READY: 'ff-ready',
+  INACTIVE: 'ff-inactive',
+  ACTIVE: 'ff-active',
+  CANVAS_READY: 'ff-canvas-ready',
+  RESPONSIVE: 'ff-responsive',
+  OVERLAY: 'ff-overlay'
+};
+
+export const defaultOptions = {
+  selector: classes.SELECTOR,
+  responsive: true,
+  trigger: 'hover',
+  overlay: false,
+  warnings: true
+};
+
+export const styleId = 'ff-styles';

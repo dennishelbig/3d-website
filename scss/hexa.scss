@@ -467,6 +467,24 @@ canvas{
   object-fit: cover;
 }
 
+canvas{
+  display: none;
+}
+
+.ff-container{
+	position: relative;
+	height: 100%;
+	display: flex;
+}
+
+// img{
+// 	width: 100%;
+// 	height: auto;
+//   display: block;
+  
+// }
+
+
 
 // show blank
 #square,
