@@ -1,0 +1,244 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+
+// #viewPortSize{
+// 	display: table!important;
+// }
+
+// @font-face {
+// 	font-family: 'Sweet';
+// 	src: url('fonts/SweetSansPro-Medium.eot?#iefix') format('embedded-opentype'),  
+// 		url('fonts/SweetSansPro-Medium.otf')  format('opentype'),
+// 		url('fonts/SweetSansPro-Medium.woff') format('woff'), 
+// 		url('fonts/SweetSansPro-Medium.ttf')  format('truetype'),
+// 		url('fonts/SweetSansPro-Medium.svg#SweetSansPro-Medium') format('svg');
+// 	font-weight: normal;
+// 	font-style: normal;
+// 	font-display: swap;
+// }
+
+@mixin translate($x, $y:0) {
+  -webkit-transform: translate($x, $y);
+	 -moz-transform: translate($x, $y);
+	  -ms-transform: translate($x, $y);
+	   -o-transform: translate($x, $y);
+		  transform: translate($x, $y);
+}
+
+
+@mixin scale($deg) {
+  -webkit-transform: scale($deg);
+	 -moz-transform: scale($deg);
+	  -ms-transform: scale($deg);
+	   -o-transform: scale($deg);
+		  transform: scale($deg);
+}
+
+@mixin rotate($deg) {
+  -webkit-transform: rotate($deg);
+	 -moz-transform: rotate($deg);
+	  -ms-transform: rotate($deg);
+	   -o-transform: rotate($deg);
+		  transform: rotate($deg);
+}
+
+@mixin translate-rotate($x, $y: 0, $deg: 0 ) {
+  -webkit-transform: translate($x, $y) rotate($deg);
+	 -moz-transform: translate($x, $y) rotate($deg);
+	  -ms-transform: translate($x, $y) rotate($deg);
+	   -o-transform: translate($x, $y) rotate($deg);
+		  transform: translate($x, $y) rotate($deg);
+}
+
+
+@mixin origin($x, $y:0, $z:0){
+	-webkit-transform-origin: $x $y $z;
+	 -moz-transform-origin: $x $y $z;
+	  -ms-transform-origin: $x $y $z;
+	   -o-transform-origin: $x $y $z;
+		  transform-origin: $x $y $z;
+}
+
+@mixin transition($args) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+@mixin delay($args) {
+  -webkit-transition-delay: $args;
+  -moz-transition-delay: $args;
+  -ms-transition-delay: $args;
+  -o-transition-delay: $args;
+  transition-delay: $args;
+}
+
+@mixin cover(){
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+
+::selection {
+    background: black; /* WebKit/Blink Browsers */
+    color: white;
+}
+::-moz-selection {
+    background: black; /* Gecko Browsers */
+    color: white;
+}
+
+html, body{
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background: lightblue;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+
+#canvas{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
+	top: 0;
+	left: 0;
+
+	$perspective: 800px;
+	perspective: $perspective;
+	-moz-perspective: $perspective;
+}
+
+
+$size: 200vw;
+	
+#info-box{
+	padding: 5px;
+	font-family: arial;
+	z-index: 100;
+	position: fixed;
+	background: red;
+	top: 0;
+	left: 0;
+	width: 200px;
+	min-height: 30px;
+	background: red;
+	color: white;
+}
+
+#square{
+	// @include origin(10% ,50% , 0px);
+	width: $size;
+	height: $size;
+	// left: 50%;
+	// top: 50%;
+	position: absolute;
+	// background: rgba(white, 0.2);
+	// background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+	transform: translate(-50%,-50%) rotateX(-90deg);
+	transform: rotateX(-90deg);
+	// transform: translate(0%) rotateX(70deg) rotateY(0deg) rotateZ(190deg);
+	transform-style: preserve-3d;
+	// transform: translate3d(0, 0, 30vh);
+	// @include origin(-100px);
+
+
+
+
+	#x-axis,
+	#z-axis{
+		transform-style: preserve-3d;
+		position: absolute;
+		width: $size;
+		height: $size;
+
+		// left: 50%;
+
+		
+	}
+
+	#z-axis{
+		// top: 20%;
+		// left: 20%;
+		// transform: translate3d(-25%,0%,0);
+		// @include origin(50%, 10%);
+
+		// rotate Z
+		// @include origin(50%, 10% , 0px);
+
+	}
+
+
+}
+
+
+
+$offset-top: 75vw;
+$offset-bottom: $offset-top * -1;
+$wall-height: $offset-top * 2;
+
+
+.top,
+.bottom{
+	position: absolute;
+	
+	width: 100%;
+	height: 100%;
+
+	background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+}
+
+
+.left,
+.right{
+	position: absolute;
+	width: 100%;
+	height: $wall-height;
+	background: red url('img/aqua.jpg');
+	transform: translate3d(0, 0, $offset-bottom) rotateX(90deg);
+	@include origin(0);
+	@include cover();
+}
+
+.right{
+	top: 100%;
+}
+
+
+.top{
+	// background: black;
+	transform: translate3d(0, 0, $offset-bottom);
+	background: lightgray;
+}
+
+.bottom{
+	// background: black;
+	transform: translate3d(0, 0, $offset-top);
+	background: gray;
+}
+
+.ff-container{
+	position: relative;
+	height: 100%;
+	display: flex;
+}
+
+img{
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+
+@import 'compass.scss';
+
+
+
+

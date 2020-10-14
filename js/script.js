@@ -28,13 +28,13 @@ var isTouch = is_touch_device4();
 function throttle (callback, limit) {
   var wait = false;                  // Initially, we're not waiting
   return function () {               // We return a throttled function
-      if (!wait) {                   // If we're not waiting
-          callback.call();           // Execute users function
-          wait = true;               // Prevent future invocations
-          setTimeout(function () {   // After a period of time
-              wait = false;          // And allow future invocations
-          }, limit);
-      }
+    if (!wait) {                   // If we're not waiting
+      callback.call();           // Execute users function
+      wait = true;               // Prevent future invocations
+      setTimeout(function () {   // After a period of time
+          wait = false;          // And allow future invocations
+      }, limit);
+    }
   };
 }
 
@@ -42,24 +42,41 @@ function throttle (callback, limit) {
 document.querySelectorAll('.wall').forEach(function( $element, i ){
   var $target = document.createElement('div');
   var $staticImg = document.createElement('div');
-  var $imgTag = document.createElement('img');
+  // var $imgTag = document.createElement('img');
   var $fullscreen = document.createElement('div');
   var $rect = document.createElement('div');
   
+  var $video = document.createElement('video');
+  var $source = document.createElement('source');
 
   $target.classList.add('target');
   $staticImg.classList.add('static-img');
   $rect.classList.add('rect');
   $fullscreen.classList.add('fullscreen');
-  
+
+
+  /*************************************************** */
+  /******************  ADD VIDEOS  ******************* */
+  /*************************************************** */
 
   if( i < 6){
-    $imgTag.setAttribute('class', 'freezeframe');
-    // $imgTag.setAttribute('src', 'img/gif_prev/'+(i+1)+'.gif');
-    $imgTag.setAttribute('src', 'img/gif/'+(i+1)+'.gif');
-    $imgTag.setAttribute('rel:animated_src', 'img/gif/'+(i+1)+'.gif');
-    $imgTag.setAttribute('rel:auto_play', '0');
-    $imgTag.setAttribute('rel:rubbable', '0');
+    $source.setAttribute('src', 'img/mp4/1/'+ ( i + 1 ) +'.mp4');
+    // $imgTag.setAttribute('class', 'freezeframe');
+    // // $imgTag.setAttribute('src', 'img/gif_prev/'+(i+1)+'.gif');
+    // $imgTag.setAttribute('src', 'img/gif/'+(i+1)+'.gif');
+    // $imgTag.setAttribute('rel:animated_src', 'img/gif/'+(i+1)+'.gif');
+    // $imgTag.setAttribute('rel:auto_play', '0');
+    // $imgTag.setAttribute('rel:rubbable', '0');
+    // $video.setAttribute('autoplay', '1');
+    $video.setAttribute('video-number', i);
+    $video.setAttribute('loop', '1');
+    $video.setAttribute('muted', '1');
+  }
+  if( i >= 6 && i < 12 ){
+    $source.setAttribute('src', 'img/mp4/2/'+ ( i - 5 ) +'.mp4');
+    $video.setAttribute('video-number', i);
+    $video.setAttribute('loop', '1');
+    $video.setAttribute('muted', '1');
   }
 
   $element.append($target);
@@ -67,26 +84,51 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
   $element.append($rect);
   $element.append($fullscreen);
 
-  $staticImg.append($imgTag);
-  
+  // $staticImg.append($imgTag);
+  $staticImg.append($video);
+  $video.append($source);
 
   
-  $target.addEventListener('click', function(){
-    if( !$rect.classList.contains('is-active') ){
+  // $target.addEventListener('click', function(){
+  //   if( !$rect.classList.contains('is-active') ){
 
-      $rect.classList.add('is-active');
-      setTimeout(function(){
-        $rect.classList.remove('is-active');
-      },100);
-    }
-  });
+  //     $rect.classList.add('is-active');
+  //     setTimeout(function(){
+  //       $rect.classList.remove('is-active');
+  //     },100);
+  //   }
+  // });
+});
+
+
+/****************************************************** */
+/***************  ADD UP DOWN BUTTONS  **************** */
+/****************************************************** */
+
+document.querySelectorAll('.wall').forEach(function( $element, i ){
+  var $elevatorControls = document.createElement('div');
+  var $elevatorUp = document.createElement('div');
+  var $elevatorDown = document.createElement('div');
+
+
+
+  $elevatorControls.setAttribute('class', 'elevator-controls');
+  $elevatorUp.setAttribute('class', 'elevator-up');
+  $elevatorDown.setAttribute('class', 'elevator-down');
+  $elevatorControls.append($elevatorUp);
+  $elevatorControls.append($elevatorDown);
+  $element.append($elevatorControls);
+
 });
 
 
 
-/************************************************ */
-/**********     GIF PLAY / PAUSE     ************ */
-/************************************************ */
+
+
+
+/****************************************************** */
+/*************     GIF PLAY / PAUSE     *************** */
+/****************************************************** */
 
 var $images = document.querySelectorAll('img');
 var $gifs = [];
@@ -119,8 +161,6 @@ $images.forEach(function($image, i){
 
       $gifs.push($gif);
     }
-
-
 });
 
 
@@ -172,12 +212,10 @@ collectNotCurrentTargets();
 
 
 
-// var x = 0;
-// var y = 0;
-
 var currentViewCoords = {
   x: 0,
-  y: 0
+  y: 0,
+  nulledX: 0
 };
 
 function xLimit( x ){
@@ -212,9 +250,11 @@ function updateAxis( x, y ){
 }
 
 
-var roundedCoords= {
-
+var roundedCoords = {
+  x: 0,
+  y: 0
 };
+
 
 function roundCoords(){
   roundedCoords.x = Math.floor(currentViewCoords.x);
@@ -331,7 +371,10 @@ function focusX( deg ){
 
 var brakePoints = [60, 120, 180, 240, 300, 360];
 var focusBool = null;
-var xIndex = null;
+var elevatorUpBool = null;
+var elevatorDownBool = null;
+var currentIndex = null;
+var currentFloor = 1;
 var focusArray_img = {
   top: 21,
   bottom: -21,
@@ -343,8 +386,22 @@ var focusArray_img = {
 var limit_img = {
   top: 21,
   bottom: -21,
-  left: -27, 
-  right: 27 
+  left: -25, 
+  right: 25 
+};
+
+var elevator_up_limit = {
+  top: 7,
+  bottom: 1,
+  left: 26, 
+  right: -26 
+};
+
+var elevator_down_limit = {
+  top: -1,
+  bottom: -7,
+  left: 26, 
+  right: -26 
 };
 
 
@@ -359,10 +416,14 @@ function nullX( x ){
   if( x > 30 ){
     x = x - 60;
   }
+  currentViewCoords.nulledX = x;
   return x;
+
+
 }
 
 
+// var nulledX = 0;
 
 function processFocus( focusArray, x, y ){
   var nulledX = nullX( x );
@@ -389,25 +450,85 @@ function adjustY( nulledX ){
 }
 
 
+// function playPauseGifs(){
+//   console.log('playpausegif');
 
-function playPauseGifs(){
-  console.log('playpausegif');
-
-  $gifs.forEach(function($gif, ribIndex){
-    // console.log($gif.items[0].$image.classList);
-    if(xIndex === ribIndex && focusBool === true){
-      // if( !$gif.items[0].$image.classList.contains('is-playing') ){
-        $gif.items[0].$image.classList.add('is-playing');
-        $gif.start();
-        console.log('start');
-      // }
-    }else{
-      $gif.items[0].$image.classList.remove('is-playing');
-      $gif.stop();
-      console.log('stop');
-    }
+//   $gifs.forEach(function($gif, ribIndex){
+//     // console.log($gif.items[0].$image.classList);
+//     if(currentIndex === ribIndex && focusBool === true){
+//       // if( !$gif.items[0].$image.classList.contains('is-playing') ){
+//         $gif.items[0].$image.classList.add('is-playing');
+//         $gif.start();
+//         console.log('start');
+//       // }
+//     }else{
+//       $gif.items[0].$image.classList.remove('is-playing');
+//       $gif.stop();
+//       console.log('stop');
+//     }
     
+//   });
+// }
+var $videos = document.querySelectorAll('video');
+
+function playPauseVideo(){
+  $videos.forEach(function($video, i){
+    if( i === currentIndex && currentFloor === 1 && focusBool === true ){
+      if( $video.paused ) {
+        $video.play();
+        console.log(currentIndex);
+        console.log(currentFloor);
+      }
+    }
+    else if( ( i - 6)  === currentIndex && currentFloor === 2 && focusBool === true ){
+      if( $video.paused ) {
+        $video.play();
+        console.log(currentIndex);
+        console.log(currentFloor);
+      }
+    }else{
+      if( !$video.paused ) {
+        $video.pause();
+      }
+    }
   });
+}
+
+
+function focusElevatorButtons(){
+  // console.log(nulledX);
+  // console.log( '--------------------------------------');
+  // console.log( currentViewCoords.nulledX ,  '<=', elevator_up_limit.left);
+  // console.log( nulledX ,  '<=', elevator_up_limit.right);
+
+  if(  
+    currentViewCoords.y <= ( elevator_up_limit.top ) && 
+    currentViewCoords.y >= ( elevator_up_limit.bottom ) && 
+    (
+      ( currentViewCoords.nulledX ) >= elevator_up_limit.left || 
+      ( currentViewCoords.nulledX ) <= elevator_up_limit.right
+    ) 
+  ){
+    // console.log('up');
+    elevatorUpBool = true;
+  }else{
+    elevatorUpBool = false;
+  }
+
+
+  if(  
+    currentViewCoords.y <= ( elevator_down_limit.top ) && 
+    currentViewCoords.y >= ( elevator_down_limit.bottom ) && 
+    (
+      ( currentViewCoords.nulledX ) >= elevator_down_limit.left || 
+      ( currentViewCoords.nulledX ) <= elevator_down_limit.right
+    )
+  ){
+    elevatorDownBool = true;
+    // console.log('down');
+  }else{
+    elevatorDownBool = false;
+  }
 }
 
 
@@ -417,7 +538,7 @@ var waiting = false;
 function focusImage( x, y ){
   var nulledX = nullX( x );
   var yAdjustment = adjustY(nulledX);  
-  xIndex = focusX( x );
+  currentIndex = focusX( x );
   
 
   if( 
@@ -433,19 +554,24 @@ function focusImage( x, y ){
     focusBool = false;
   }
 
+  
+
+  // console.log(currentIndex);
 
 
-  if (!waiting) {                       // If we're not waiting
-  playPauseGifs()                 ;  // Execute users function
+  if (!waiting) {    
+    playPauseVideo(); 
+    focusElevatorButtons();                  // If we're not waiting
+  // playPauseGifs()                 ;  // Execute users function
   waiting = true;                   // Prevent future invocations
   setTimeout(function () {          // After a period of time
       waiting = false;              // And allow future invocations
-  }, 1000);
+  }, 200);
 }
 
 
   // $rubs.forEach(function(rub, ribIndex){
-  //   if(xIndex === ribIndex && focusBool === true ){
+  //   if(currentIndex === ribIndex && focusBool === true ){
   //     rub.play();
   //   }else{
   //     rub.pause();
@@ -464,17 +590,17 @@ var $targets = document.querySelectorAll('.current-level .target');
 
 
 function isOverlapping(){
-  if( focusBool === true && !$targets[xIndex].classList.contains('focus') ){
+  if( focusBool === true && !$targets[currentIndex].classList.contains('focus') ){
 
-    $targets[xIndex].classList.add('focus');
-    $targets[xIndex].parentNode.parentNode.classList.add('focus');
+    $targets[currentIndex].classList.add('focus');
+    $targets[currentIndex].parentNode.parentNode.classList.add('focus');
     $crossHair.classList.add('over');
   }
 
 
   if(focusBool !== true){
-    $targets[xIndex].classList.remove('focus');
-    $targets[xIndex].parentNode.parentNode.classList.remove('focus');
+    $targets[currentIndex].classList.remove('focus');
+    $targets[currentIndex].parentNode.parentNode.classList.remove('focus');
     $crossHair.classList.remove('over');
   }
 }
@@ -613,50 +739,86 @@ var $floor = document.querySelector('.level');
 /****************************************/
 
 
+
+
 var $level1 = document.querySelector('.level-1');
 var $level2 = document.querySelector('.level-2');
 var $level3 = document.querySelector('.level-3');
 
 
-function focusY(){
-  if( $canvas.classList.contains('first') ){
-    if( currentViewCoords.y < 0 ){ // looking down
-      $canvas.classList.remove('first');
-      $canvas.classList.add('second');
+function elevator_1_to_2(){
+  $canvas.classList.remove('first');
+  $canvas.classList.add('second');
 
-      $level1.classList.remove('current-level');
-      $level2.classList.add('current-level');
-      $level3.classList.remove('current-level');
+  $level1.classList.remove('current-level');
+  $level2.classList.add('current-level');
+  $level3.classList.remove('current-level');
+  currentFloor++;
+}
+
+function elevator_2_to_1(){
+  $canvas.classList.add('first');
+  $canvas.classList.remove('second');
+
+  $level1.classList.add('current-level');
+  $level2.classList.remove('current-level');
+  $level3.classList.remove('current-level');
+  currentFloor--;
+}
+
+function elevator_2_to_3(){
+  $canvas.classList.add('third');
+  $canvas.classList.remove('second');
+    
+  $level1.classList.remove('current-level');
+  $level2.classList.remove('current-level');
+  $level3.classList.add('current-level');
+  currentFloor++;
+}
+
+function elevator_3_to_2(){
+  $canvas.classList.remove('third');
+  $canvas.classList.add('second');
+  currentFloor--;
+  $level1.classList.remove('current-level');
+  $level2.classList.add('current-level');
+  $level3.classList.remove('current-level');
+}
+
+
+
+function moveElevator(){
+
+  console.log(elevatorUpBool);
+
+  if( elevatorUpBool === true ){
+    console.log('up button');
+  }
+  if( elevatorDownBool === true ){
+    console.log('down button');
+  }
+
+
+
+  if( $canvas.classList.contains('first') ){
+    if( elevatorDownBool === true ){ // looking down
+      elevator_1_to_2();
     }
   }
 
   else if( $canvas.classList.contains('second') ){
     
-    if(  currentViewCoords.y >= 0 ){ // looking up
-      $canvas.classList.add('first');
-      $canvas.classList.remove('second');
-  
-      $level1.classList.add('current-level');
-      $level2.classList.remove('current-level');
-      $level3.classList.remove('current-level');
-    }else{ // looking down
-      $canvas.classList.add('third');
-      $canvas.classList.remove('second');
-        
-      $level1.classList.remove('current-level');
-      $level2.classList.remove('current-level');
-      $level3.classList.add('current-level');
+    if(  elevatorUpBool === true ){ // looking up
+      elevator_2_to_1();
+
+    }else if(elevatorDownBool === true){ // looking down
+      elevator_2_to_3();
     }
   }
 
   else if( $canvas.classList.contains('third') ){
-    if(  currentViewCoords.y >= 0 ){ // looking up
-      $canvas.classList.remove('third');
-      $canvas.classList.add('second');
-        
-      $level1.classList.remove('current-level');
-      $level2.classList.add('current-level');
-      $level3.classList.remove('current-level');
+    if(  elevatorUpBool === true ){ // looking up
+      elevator_3_to_2();
     }
   }
 
@@ -670,7 +832,7 @@ function focusY(){
 
 function crosshairLocked(){
   $body.classList.add('cross-haired');
-  focusY();
+  moveElevator();
 }
 
 
@@ -714,13 +876,13 @@ targetingThrottled = throttle( isOverlapping, 100 ); // every 200ms
 function lockView() {
   if(document.pointerLockElement === $crossHair ||
   document.mozPointerLockElement === $crossHair) {
-    console.log('locked');
+    // console.log('locked');
     document.addEventListener("mousemove", getPointerInput, false);
     document.addEventListener("mousemove",  targetingThrottled, false);
     
     crosshairLocked();
   } else {
-    console.log('unlocked');
+    // console.log('unlocked');
     document.removeEventListener("mousemove", getPointerInput, false);
     document.removeEventListener("mousemove", targetingThrottled, false);
 
