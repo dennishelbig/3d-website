@@ -41,8 +41,7 @@ function throttle (callback, limit) {
 
 document.querySelectorAll('.wall').forEach(function( $element, i ){
   var $target = document.createElement('div');
-  var $staticImg = document.createElement('div');
-  // var $imgTag = document.createElement('img');
+  var $mediaContainer = document.createElement('div');
   var $fullscreen = document.createElement('div');
   var $rect = document.createElement('div');
   
@@ -50,7 +49,7 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
   var $source = document.createElement('source');
 
   $target.classList.add('target');
-  $staticImg.classList.add('static-img');
+  $mediaContainer.classList.add('media-container');
   $rect.classList.add('rect');
   $fullscreen.classList.add('fullscreen');
 
@@ -61,13 +60,6 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
 
   if( i < 6){
     $source.setAttribute('src', 'img/mp4/1/'+ ( i + 1 ) +'.mp4');
-    // $imgTag.setAttribute('class', 'freezeframe');
-    // // $imgTag.setAttribute('src', 'img/gif_prev/'+(i+1)+'.gif');
-    // $imgTag.setAttribute('src', 'img/gif/'+(i+1)+'.gif');
-    // $imgTag.setAttribute('rel:animated_src', 'img/gif/'+(i+1)+'.gif');
-    // $imgTag.setAttribute('rel:auto_play', '0');
-    // $imgTag.setAttribute('rel:rubbable', '0');
-    // $video.setAttribute('autoplay', '1');
     $video.setAttribute('video-number', i);
     $video.setAttribute('loop', '1');
     $video.setAttribute('muted', '1');
@@ -80,24 +72,12 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
   }
 
   $element.append($target);
-  $element.append($staticImg);
+  $element.append($mediaContainer);
   $element.append($rect);
   $element.append($fullscreen);
 
-  // $staticImg.append($imgTag);
-  $staticImg.append($video);
+  $mediaContainer.append($video);
   $video.append($source);
-
-  
-  // $target.addEventListener('click', function(){
-  //   if( !$rect.classList.contains('is-active') ){
-
-  //     $rect.classList.add('is-active');
-  //     setTimeout(function(){
-  //       $rect.classList.remove('is-active');
-  //     },100);
-  //   }
-  // });
 });
 
 
@@ -107,61 +87,62 @@ document.querySelectorAll('.wall').forEach(function( $element, i ){
 
 document.querySelectorAll('.wall').forEach(function( $element, i ){
   var $elevatorControls = document.createElement('div');
+
   var $elevatorUp = document.createElement('div');
+  var $elevatorUpTop = document.createElement('div');
+
   var $elevatorDown = document.createElement('div');
+  var $elevatorDownBottom = document.createElement('div');
 
+  var $elevatorBackground = document.createElement('div');
 
+  var $span = document.createElement('span');
 
+  $elevatorBackground.classList.add('background');
   $elevatorControls.setAttribute('class', 'elevator-controls');
   $elevatorUp.setAttribute('class', 'elevator-up');
+  $elevatorUpTop.setAttribute('class', 'elevator-up-top');
   $elevatorDown.setAttribute('class', 'elevator-down');
+  $elevatorDownBottom.setAttribute('class', 'elevator-down-bottom');
+
+
   $elevatorControls.append($elevatorUp);
   $elevatorControls.append($elevatorDown);
+
+  $elevatorUpTop.append( $elevatorBackground );
+  $elevatorDownBottom.append( $elevatorBackground.cloneNode() );
+  
   $element.append($elevatorControls);
+  $element.append($elevatorUpTop);
+  $element.append($elevatorDownBottom);
 
+  function cloneSpan( string ){
+    var $clone = $span.cloneNode();
+    $clone.innerHTML = string;
+    return $clone;
+  }
+
+  if( i < 6){
+    $elevatorDownBottom.append( cloneSpan('websites') );
+  }
+  if( i >= 6 && i < 12 ){
+    $elevatorUpTop.append( cloneSpan('animation') );
+    $elevatorDownBottom.append( cloneSpan('illustration') );
+  }else{
+    $elevatorUpTop.append( cloneSpan('websites') );
+
+  }
+
+  $elevatorUpTop.append( $elevatorBackground.cloneNode() );
+  $elevatorDownBottom.append($elevatorBackground.cloneNode() );
+
+
+  var buttonSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="495.5px" height="425.8px" viewBox="0 0 495.5 425.8" style="enable-background:new 0 0 495.5 425.8;" xml:space="preserve"><polygon class="st0" points="0,425.8 247.7,0 495.5,425.8"/></svg>';
+  $elevatorUp.innerHTML = buttonSVG;
+  $elevatorDown.innerHTML = buttonSVG;
 });
 
 
-
-
-
-
-/****************************************************** */
-/*************     GIF PLAY / PAUSE     *************** */
-/****************************************************** */
-
-var $images = document.querySelectorAll('img');
-var $gifs = [];
-$images.forEach(function($image, i){
-    if (/.*\.gif/.test($image.src)) {
-      //   var rub = new SuperGif({ gif: $image } );
-      //   rub.load(function(){
-      //     console.log('oh hey, now the gif is loaded');
-      //   });
-      //   $rubs.push(rub);
-      //   setTimeout(function(){
-      //   },0 * i );
-      //   // use rubs later on play / pause
-    
-      var $gif = new Freezeframe($image, {
-        trigger: false
-      });
-      $gif.stop();
-       
-      $gif.on('toggle', function(items, isPlaying) {
-        if (isPlaying) {
-          // console.log($items.$image);
-        // items.$image.classList.add('is-playing');
-          // do something on start
-        } else {
-        // items.$image.classList.remove('is-playing');
-          // do something on stop
-        }
-      });
-
-      $gifs.push($gif);
-    }
-});
 
 
 
@@ -177,6 +158,7 @@ var $zaxis = document.getElementById("z-axis");
 
 var $targetsCurrent = [];
 var $targetsNotCurrent = [];
+
 
 function collectCurrentTargets(){
   $targetsCurrent = [
@@ -215,7 +197,10 @@ collectNotCurrentTargets();
 var currentViewCoords = {
   x: 0,
   y: 0,
-  nulledX: 0
+  xNulled: 0,
+  yAdjusted: 0,
+  yAdjustedCenter: 0,
+  yAdjustedSide: 0
 };
 
 function xLimit( x ){
@@ -383,6 +368,7 @@ var focusArray_img = {
   isFocus: false
 };
 
+/**********    LIMITS    ************/ 
 var limit_img = {
   top: 21,
   bottom: -21,
@@ -404,10 +390,34 @@ var elevator_down_limit = {
   right: -26 
 };
 
+var elevator_up_top_limit = {
+  // topMin:25,
+  // topMax: 29,
+  top: 27,
+  bottom: 22, 
+  // bottomMin: 19,
+  // bottomMax: 22,
+  // left: -30, 
+  // right: 30 
+};
+
+var elevator_down_bottom_limit = {
+  top: -22,
+  bottom: -27,
+  // left: -30, 
+  // right: 30 
+};
+/**********    LIMITS END   ************/ 
 
 
-function nullX( x ){
-  brakePoints.forEach( function( value, i ){
+
+
+
+
+
+function nullX(){
+  var x = currentViewCoords.x;
+  brakePoints.forEach( function(){
     if( x > 60  ){
       x = x - 60;
     }
@@ -416,22 +426,25 @@ function nullX( x ){
   if( x > 30 ){
     x = x - 60;
   }
-  currentViewCoords.nulledX = x;
+  currentViewCoords.xNulled = x;
+
+  if( x < 0 ){
+    currentViewCoords.xNulledpositiv = x * -1;
+  }else{
+    currentViewCoords.xNulledpositiv = x;
+  }
   return x;
-
-
 }
 
 
-// var nulledX = 0;
 
 function processFocus( focusArray, x, y ){
   var nulledX = nullX( x );
-  focusArray.yAdjustment = ( nulledX < 0 ) ? nulledX * -1 / 10 : nulledX / 10; 
+  focusArray.yAdjusted = ( nulledX < 0 ) ? nulledX * -1 / 10 : nulledX / 10; 
 
   if( 
-    y <= ( focusArray.top - focusArray.yAdjustment ) && 
-    y >= ( focusArray.bottom + focusArray.yAdjustment ) && 
+    y <= ( focusArray.top - focusArray.yAdjusted ) && 
+    y >= ( focusArray.bottom + focusArray.yAdjusted ) && 
     nulledX >= focusArray.left && 
     nulledX <= focusArray.right 
   ){
@@ -444,31 +457,48 @@ function processFocus( focusArray, x, y ){
 }
 
 
-function adjustY( nulledX ){
-  var yAdjustment = ( nulledX < 0 ) ? nulledX * -1 / 10 : nulledX / 10; 
-  return yAdjustment;
+function addCurrentXtoBody(){
+  if( !$body.classList.contains( 'current-index-' + currentIndex ) ){
+    for ( var walls = 0; walls < 6; walls++ ) {
+      $body.classList.remove( 'current-index-' + walls );
+    }
+    $body.classList.add( 'current-index-' + currentIndex );
+  }
+
 }
 
 
-// function playPauseGifs(){
-//   console.log('playpausegif');
 
-//   $gifs.forEach(function($gif, ribIndex){
-//     // console.log($gif.items[0].$image.classList);
-//     if(currentIndex === ribIndex && focusBool === true){
-//       // if( !$gif.items[0].$image.classList.contains('is-playing') ){
-//         $gif.items[0].$image.classList.add('is-playing');
-//         $gif.start();
-//         console.log('start');
-//       // }
-//     }else{
-//       $gif.items[0].$image.classList.remove('is-playing');
-//       $gif.stop();
-//       console.log('stop');
-//     }
-    
-//   });
-// }
+function adjustY(){
+  currentViewCoords.yAdjusted = ( currentViewCoords.xNulled < 0 ) ? currentViewCoords.xNulled * -1 / 10 : currentViewCoords.xNulled / 10; 
+
+  var ypc = (currentViewCoords.y > 0) ? 
+    100 / 90 * ( 90 - currentViewCoords.y ) : 
+    100 / 90 * ( 90 + currentViewCoords.y );
+
+  var yAdjusted = currentViewCoords.y / 10;
+  var maxX = 30;
+  var xpcToCenter = 100 / 30 * ( maxX - currentViewCoords.xNulledpositiv );
+  var xpcToSide = 100 / 30 * currentViewCoords.xNulledpositiv;
+
+  var yOffsetCenter = (9 - ( 9 / 100 * ypc)) / 100 * xpcToCenter; // 9 === max y Adjust
+
+
+  // currentViewCoords.yAdjustedCenter = currentViewCoords.y - (yAdjusted / 100 * xpcToCenter);
+  currentViewCoords.yAdjustedCenter = currentViewCoords.y - (yAdjusted / 100 * xpcToCenter);
+  currentViewCoords.yAdjustedSide = currentViewCoords.y + ( yAdjusted / 100 * ( xpcToSide / 100 * ypc));
+  // elevator_up_top_limit.top 
+
+  // console.log(currentViewCoords.yAdjustedCenter);
+  // console.log(yOffsetCenter);
+
+  // console.log( currentViewCoords.yAdjusted );
+  // console.log( currentViewCoords.yAdjusted );
+}
+
+
+
+
 var $videos = document.querySelectorAll('video');
 
 function playPauseVideo(){
@@ -476,15 +506,15 @@ function playPauseVideo(){
     if( i === currentIndex && currentFloor === 1 && focusBool === true ){
       if( $video.paused ) {
         $video.play();
-        console.log(currentIndex);
-        console.log(currentFloor);
+        // console.log(currentIndex);
+        // console.log(currentFloor);
       }
     }
     else if( ( i - 6)  === currentIndex && currentFloor === 2 && focusBool === true ){
       if( $video.paused ) {
         $video.play();
-        console.log(currentIndex);
-        console.log(currentFloor);
+        // console.log(currentIndex);
+        // console.log(currentFloor);
       }
     }else{
       if( !$video.paused ) {
@@ -494,19 +524,19 @@ function playPauseVideo(){
   });
 }
 
+function highlightElevatorButtons(){
+  $body.classList.toggle('elevator-up-active', elevatorUpBool === true );
+  $body.classList.toggle('elevator-down-active', elevatorDownBool === true );
+}
+
 
 function focusElevatorButtons(){
-  // console.log(nulledX);
-  // console.log( '--------------------------------------');
-  // console.log( currentViewCoords.nulledX ,  '<=', elevator_up_limit.left);
-  // console.log( nulledX ,  '<=', elevator_up_limit.right);
-
   if(  
     currentViewCoords.y <= ( elevator_up_limit.top ) && 
     currentViewCoords.y >= ( elevator_up_limit.bottom ) && 
     (
-      ( currentViewCoords.nulledX ) >= elevator_up_limit.left || 
-      ( currentViewCoords.nulledX ) <= elevator_up_limit.right
+      ( currentViewCoords.xNulled ) >= elevator_up_limit.left || 
+      ( currentViewCoords.xNulled ) <= elevator_up_limit.right
     ) 
   ){
     // console.log('up');
@@ -516,12 +546,13 @@ function focusElevatorButtons(){
   }
 
 
+
   if(  
     currentViewCoords.y <= ( elevator_down_limit.top ) && 
     currentViewCoords.y >= ( elevator_down_limit.bottom ) && 
     (
-      ( currentViewCoords.nulledX ) >= elevator_down_limit.left || 
-      ( currentViewCoords.nulledX ) <= elevator_down_limit.right
+      ( currentViewCoords.xNulled ) >= elevator_down_limit.left || 
+      ( currentViewCoords.xNulled ) <= elevator_down_limit.right
     )
   ){
     elevatorDownBool = true;
@@ -529,6 +560,34 @@ function focusElevatorButtons(){
   }else{
     elevatorDownBool = false;
   }
+
+
+
+  if( 
+    currentViewCoords.yAdjustedCenter <= ( elevator_up_top_limit.top ) && 
+    currentViewCoords.yAdjustedCenter >= ( elevator_up_top_limit.bottom )
+  ){
+    elevatorUpBool = true;
+    $body.classList.add('elevator-top-active');
+  }else{
+    elevatorUpBool = false;
+    $body.classList.remove('elevator-top-active');
+  }
+
+
+
+  if(
+    currentViewCoords.yAdjustedCenter <= ( elevator_down_bottom_limit.top ) && 
+    currentViewCoords.yAdjustedCenter >= ( elevator_down_bottom_limit.bottom )
+  ){
+    elevatorDownBool = true;
+    $body.classList.add('elevator-bottom-active');
+  }else{
+    elevatorDownBool = false;
+    $body.classList.remove('elevator-bottom-active');
+  }
+
+  
 }
 
 
@@ -536,16 +595,16 @@ function focusElevatorButtons(){
 var waiting = false;     
 
 function focusImage( x, y ){
-  var nulledX = nullX( x );
-  var yAdjustment = adjustY(nulledX);  
+  nullX();
+  adjustY();  
+
   currentIndex = focusX( x );
   
-
   if( 
-    y <= ( limit_img.top - yAdjustment ) && 
-    y >= ( limit_img.bottom + yAdjustment ) && 
-    nulledX >= limit_img.left && 
-    nulledX <= limit_img.right 
+    currentViewCoords.y <= ( limit_img.top - currentViewCoords.yAdjusted ) && 
+    currentViewCoords.y >= ( limit_img.bottom + currentViewCoords.yAdjusted ) && 
+    currentViewCoords.xNulled >= limit_img.left && 
+    currentViewCoords.xNulled <= limit_img.right 
   ){
     document.body.classList.add('background-black');
     focusBool = true;
@@ -561,25 +620,16 @@ function focusImage( x, y ){
 
   if (!waiting) {    
     playPauseVideo(); 
-    focusElevatorButtons();                  // If we're not waiting
-  // playPauseGifs()                 ;  // Execute users function
-  waiting = true;                   // Prevent future invocations
-  setTimeout(function () {          // After a period of time
-      waiting = false;              // And allow future invocations
-  }, 200);
+    focusElevatorButtons(); 
+    highlightElevatorButtons();  
+    addCurrentXtoBody();               // If we're not waiting
+    // playPauseGifs()                 ;  // Execute users function
+    waiting = true;                   // Prevent future invocations
+    setTimeout(function () {          // After a period of time
+        waiting = false;              // And allow future invocations
+    }, 100);
+  }
 }
-
-
-  // $rubs.forEach(function(rub, ribIndex){
-  //   if(currentIndex === ribIndex && focusBool === true ){
-  //     rub.play();
-  //   }else{
-  //     rub.pause();
-  //   }
-  // });
-  // playPauseGifs();
-}
-
 
 
 var currentTouchX = 0;

@@ -5,19 +5,165 @@
   left: 0;
   top: 50%;
   transform-origin: 50% 50%;
-  transform: translate3d(-50%, -50%, -0em) rotateY(30deg);
+  transform: translate(-50%, -50%,) rotateY(30deg);
+}
 
-  background: pink;
 
-  .elevator-up,
-  .elevator-down{
-    position: absolute;
+.elevator-up,
+.elevator-down{
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  display: none;
+
+  svg{
     width: 100%;
-    height: 40%;
-    background-color: darkmagenta;
-  }
+    height: 100%;
 
-  .elevator-down{
-    bottom: 0;
+    polygon{
+      fill: darken(lightblue, 20);
+      transition: 0.2s;
+    }
   }
 }
+
+
+.elevator-up-top,
+.elevator-down-bottom{
+  position: absolute;
+  width: 100%;
+  height: 15%;
+  background: rgba(white, 0.5);
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center
+  ;
+  .background{
+    opacity: 0;
+    transition: 0.2s linear;
+    position: relative;
+    width: 10%;
+    height: 200%;
+    left: 0;
+    background-image: url('../img/elevator/background.svg');
+    background-size: 100% 100%;
+  }
+
+  span{
+    text-transform: uppercase;
+    font-family: Arial;
+    font-weight: bold;
+  }
+}
+
+
+.level-part.enable-focus{
+  .background{
+    transition: 0.2s linear;
+    opacity: 0.2;
+  }
+}
+
+
+.elevator-up-top{
+  top: 0;
+  transform: translate(0,-140%);
+}
+
+
+.elevator-down-bottom{
+  bottom: 0;
+  transform: translate(0, 140%);
+
+  .background{
+    transform: scaleY(-1);
+  }
+}
+
+
+body.elevator-up-active .elevator-up,
+body.elevator-down-active .elevator-down{
+  transform:scale(1.2);
+  transition: 0.5s;
+
+  svg polygon{
+    fill: white;
+  }
+}
+
+
+body.elevator-top-active .elevator-up-top{
+  background: white;  
+}
+body.elevator-bottom-active .elevator-down-bottom{
+  background: white;
+}
+
+
+.elevator-up-top,
+.elevator-down-bottom{
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+$elevatorButtonTransition: opacity .5s linear 1s;
+
+
+#canvas.first{
+  .level-1{
+    // .elevator-up-top,
+    .elevator-down-bottom{
+      opacity: 1;
+      transition: $elevatorButtonTransition;
+    }
+  }
+}
+
+
+#canvas.second{
+  .level-2{
+    .elevator-up-top,
+    .elevator-down-bottom{
+      opacity: 1;
+      transition: $elevatorButtonTransition;
+    }
+  }
+}
+
+
+#canvas.third{
+  .level-3{
+    // .elevator-down-bottom,
+    .elevator-up-top{
+      opacity: 1;
+      transition: $elevatorButtonTransition;
+    }
+  }
+}
+
+
+.elevator-down{
+  bottom: 0;
+
+  svg{
+    transform: rotate(180deg);
+  }
+}
+
+
+.level-1 .elevator-up,
+.level-3 .elevator-down{
+  opacity: 0.2;
+}
+
+
+body.elevator-up-active .level-1 .elevator-up,
+body.elevator-down-active .level-3 .elevator-down{
+  transform:scale(1);
+  svg polygon{
+    fill: darken(lightblue, 20);;
+  }
+}
+
+
